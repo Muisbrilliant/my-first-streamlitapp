@@ -20,13 +20,12 @@ def load_data(path):
     return df
 
 
-g_json = json.load(open('src/georef-switzerland-kanton.geojson'))
-df_powerplants_raw = pd.read_csv("src/renewable_power_plants_CH.csv", dtype={"fips": str})
+g_json = json.load(open('georef-switzerland-kanton.geojson'))
+df_powerplants_raw = pd.read_csv("renewable_power_plants_CH.csv", dtype={"fips": str})
 df_powerplants = deepcopy(df_powerplants_raw)
 
 # input the full canton name
 df_canton = pd.read_html('https://kb.bullseyelocations.com/article/82-switzerland-canton-codes')[0]
-#install something for html, also remember to update the requirements.txt and push it.
 df_canton.columns = df_canton.iloc[0]
 df_canton = df_canton.drop(df_canton.index[0]).rename(columns={'Canton Name': 'Canton_Name', 'Abbreviation': 'canton'})
 df = pd.merge(df_canton, df_powerplants, how='inner', left_on='canton', right_on='canton')
